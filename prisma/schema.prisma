@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model account {
+  account_id      Decimal   @id @default(0) @db.Decimal(8, 0)
+  username        String?   @db.VarChar(60)
+  password        String?
+  account_type_id Decimal?  @db.Decimal(2, 0)
+  name            String?   @db.VarChar(60)
+  email           String?   @db.VarChar(60)
+  phone           String?   @db.VarChar(16)
+  birthday        DateTime? @db.DateTime(0)
+  address         String?   @db.VarChar(200)
+  city            String?   @db.VarChar(50)
+  state_id        String?   @db.Char(2)
+  status          Decimal?  @db.Decimal(1, 0)
+  image_id        Decimal   @db.Decimal(9, 0)
+  color           String    @db.VarChar(7)
+  background      String    @db.VarChar(7)
+  date_added      DateTime? @db.DateTime(0)
+  date_modified   DateTime? @db.DateTime(0)
+
+  @@index([account_type_id], map: "account_type_id")
+  @@index([state_id], map: "state_id")
+}
+
+model account_type {
+  account_type_id Decimal @id @default(0) @db.Decimal(2, 0)
+  name            String? @db.VarChar(50)
+}
+
+model files {
+  id           Int      @id @unique(map: "uniq_id_files") @default(autoincrement())
+  originalName String   @db.VarChar(300)
+  filename     String   @db.VarChar(300)
+  mimeType     String   @db.VarChar(3000)
+  size         Int
+  path         String   @db.VarChar(300)
+  url          String   @db.VarChar(300)
+  createdAt    DateTime @db.DateTime(0)
+}
+
+model sales {
+  id        Int      @id @unique(map: "uniq_id_sales") @default(autoincrement())
+  clienteId Int?
+  createAt  DateTime @db.DateTime(0)
+  updateAt  DateTime @db.DateTime(0)
+  deleteAt  DateTime @db.DateTime(0)
+  obs       String?  @db.VarChar(200)
+  paymentMethod Int?
+}
