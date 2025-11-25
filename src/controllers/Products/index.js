@@ -8,7 +8,7 @@ export const getProducts = async (req, res) => {
 	try {
 		const Products = await prisma.products.findMany({
 			orderBy: {
-				createAt: 'desc' // se você quer usar dateUpdate
+				createAt: 'desc'
 			}
 		});
 
