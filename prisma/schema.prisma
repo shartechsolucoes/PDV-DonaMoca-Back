@@ -47,11 +47,25 @@ model files {
 }
 
 model sales {
-  id        Int      @id @unique(map: "uniq_id_sales") @default(autoincrement())
-  clienteId Int?
-  createAt  DateTime @db.DateTime(0)
-  updateAt  DateTime @db.DateTime(0)
-  deleteAt  DateTime @db.DateTime(0)
-  obs       String?  @db.VarChar(200)
+  id            Int      @id @unique(map: "uniq_id_sales") @default(autoincrement())
+  clienteId     Int?
+  createAt      DateTime @db.DateTime(0)
+  updateAt      DateTime @db.DateTime(0)
+  deleteAt      DateTime @db.DateTime(0)
+  obs           String?  @db.VarChar(200)
   paymentMethod Int?
+}
+
+model products {
+  id          Int      @id @unique(map: "uniq_id_sales") @default(autoincrement())
+  cod         Int?
+  name        String
+  type        String
+  description String?
+  obs         String?  @db.VarChar(200)
+  cost        String?
+  value       String?
+  createAt    DateTime @db.DateTime(0)
+  updateAt    DateTime @db.DateTime(0)
+  deleteAt    DateTime @db.DateTime(0)
 }
