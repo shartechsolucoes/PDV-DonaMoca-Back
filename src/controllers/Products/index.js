@@ -5,133 +5,139 @@ import { startOfDay, endOfDay } from "date-fns";
 const prisma = new PrismaClient();
 
 export const getProducts = async (req, res) => {
-	try {
-		const Products = await prisma.products.findMany({
-			orderBy: {
-				createAt: 'desc'
-			}
-		});
+    try {
+        const Products = await prisma.products.findMany({
+            orderBy: {
+                createAt: 'desc'
+            }
+        });
 
-		return res.send(Products);
-	} catch (err) {
-		console.error("Erro ao buscar:", err);
-		return res.status(500).send({
-			error: "Erro ao buscar",
-			message: err.message,
-			code: err.code,
-		});
-	}
+        return res.send(Products);
+    } catch (err) {
+        console.error("Erro ao buscar:", err);
+        return res.status(500).send({
+            error: "Erro ao buscar",
+            message: err.message,
+            code: err.code,
+        });
+    }
 };
-// Criação de venda
 export const createProduct = async (req, res) => {
-  const { idCliente, obs, paymentMethod } = req.body;
 
-  // Validação simples dos parâmetros
-  if (!idCliente || !obs) {
-    return res.status(400).send({
-      error: "Parâmetros inválidos",
-      message: "idCliente e obs são obrigatórios"
-    });
-  }
+    // Validação simples dos parâmetros
+    if (!req.body.cod || !req.body.name) {
+        return res.status(400).send({
+            error: "Parâmetros inválidos",
+            message: "cod e nome são obrigatórios"
+        });
+    }
 
-  try {
-    // Criando a venda no banco de dados
-    const sale = await prisma.products.create({
-      data: {
-        clienteId: idCliente,
-        obs: obs,
-        createAt: new Date(),
-        updateAt: new Date(),
-        deleteAt: new Date(), // ou pode ser `new Date()` se você preferir
-		paymentMethod: paymentMethod,
-      }
-    });
+    try {
+        // Criando a venda no banco de dados
+        const product = await prisma.products.create({
+            data: {
+                cod: req.body.cod,
+                name: req.body.name,
+                type: req.body.type,
+                description: req.body.description,
+                obs: req.body.obs,
+                cost: req.body.cost,
+                value: req.body.value,
+                status: req.body.status,
+                createAt: new Date(),
+                updateAt: new Date(),
+            }
+        });
 
-    // Retornando a venda criada
-    return res.status(201).send(sale);
+        // Retornando a venda criada
+        return res.status(201).send(product);
 
-  } catch (err) {
-    console.error("Erro ao criar venda:", err);
-    return res.status(500).send({
-      error: "Erro ao criar venda",
-      message: err.message,
-      code: err.code,
-    });
-  }
+    } catch (err) {
+        console.error("Erro ao criar:", err);
+        return res.status(500).send({
+            error: "Erro ao criar",
+            message: err.message,
+            code: err.code,
+        });
+    }
 };
-// Atualizar venda
+
 export const updateProduct = async (req, res) => {
-  const { id } = req.params;
-  const { idCliente, obs, paymentMethod } = req.body;
-
-  if (!id) {
-    return res.status(400).send({
-      error: "Parâmetros inválidos",
-      message: "ID da venda é obrigatório"
-    });
-  }
-
-  try {
-    const updatedSale = await prisma.sales.update({
-      where: { id: Number(id) },
-      data: {
-        clienteId: idCliente,
-        obs: obs,
-		paymentMethod: paymentMethod,
-        updateAt: new Date()
-      }
-    });
-
-    return res.send(updatedSale);
-  } catch (err) {
-    console.error("Erro ao atualizar venda:", err);
-    return res.status(500).send({
-      error: "Erro ao atualizar venda",
-      message: err.message,
-      code: err.code,
-    });
-  }
-};
-export const getProduct = async (request, reply) => {
-	try {
-		const id = parseInt(request.params.id);
-		if (isNaN(id)) return reply.status(400).send({ message: "ID inválido" });
-
-		const author = await prisma.sales.findUnique({
-			where: { id: id },
-		});
-
-		if (!author) return reply.status(404).send({ message: "Venda não encontrado" });
-
-		return reply.status(200).send(author);
-	} catch (error) {
-		console.error("Erro ao buscar Venda:", error);
-		return reply.status(500).send({ message: "Erro ao buscar Venda", error });
-	}
-};
-export const deleteProduct = async (req, res) => {
-  try {
     const { id } = req.params;
 
-    // Atualiza o campo deleteAt com a data/hora atual
-    const sale = await prisma.sales.update({
-      where: { id: Number(id) },
-      data: {
-        deleteAt: new Date()
-      }
-    });
+    if (!id) {
+        return res.status(400).send({
+            error: "Parâmetros inválidos",
+            message: "ID da venda é obrigatório"
+        });
+    }
 
-    return res.send({
-      message: "Venda marcada como excluída com sucesso.",
-      sale
-    });
+    try {
+        const updatedProduct = await prisma.products.update({
+            where: { id: Number(id) },
+            data: {
+                cod: req.body.cod,
+                name: req.body.name,
+                type: req.body.type,
+                description: req.body.description,
+                obs: req.body.obs,
+                cost: req.body.cost,
+                value: req.body.value,
+                status: req.body.status,
+                updateAt: new Date()
+            }
+        });
 
-  } catch (err) {
-    console.error("Erro ao marcar venda como excluída:", err);
-    return res.status(500).send({
-      error: "Erro ao marcar venda como excluída.",
-      message: err.message,
-      code: err.code,
-    });
-  }
+        return res.send(updatedProduct);
+    } catch (err) {
+        console.error("Erro ao atualizar:", err);
+        return res.status(500).send({
+            error: "Erro ao atualizar",
+            message: err.message,
+            code: err.code,
+        });
+    }
+};
+export const getProduct = async (request, reply) => {
+    try {
+        const id = parseInt(request.params.id);
+        if (isNaN(id)) return reply.status(400).send({ message: "ID inválido" });
+
+        const product = await prisma.products.findUnique({
+            where: { id: id },
+        });
+
+        if (!Product) return reply.status(404).send({ message: "Não encontrado" });
+
+        return reply.status(200).send(product);
+    } catch (error) {
+        console.error("Erro ao buscar:", error);
+        return reply.status(500).send({ message: "Erro ao buscar", error });
+    }
+};
+export const deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Atualiza o campo deleteAt com a data/hora atual
+        const product = await prisma.products.update({
+            where: { id: Number(id) },
+            data: {
+                deleteAt: new Date()
+            }
+        });
+
+        return res.send({
+            message: "Marcada como excluída com sucesso.",
+            product
+        });
+
+    } catch (err) {
+        console.error("Erro ao marcar como excluída:", err);
+        return res.status(500).send({
+            error: "Erro ao marcar como excluída.",
+            message: err.message,
+            code: err.code,
+        });
+    }
 };

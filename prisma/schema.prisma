@@ -60,11 +60,13 @@ model products {
   id          Int      @id @unique(map: "uniq_id_sales") @default(autoincrement())
   cod         Int?
   name        String
-  type        String
+  type        Int?
   description String?
   obs         String?  @db.VarChar(200)
   cost        String?
   value       String?
+  imgId       Int?
+  status      Int?
   createAt    DateTime @default(now())
   updateAt    DateTime @db.DateTime(0)
   deleteAt    DateTime @db.DateTime(0)
