@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import images from "./src/routes/images.js";
 import files from "./src/routes/files.js";
 import sales from "./src/routes/sales.js";
+import products from "./src/products/sales.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -45,6 +46,7 @@ fastify.register(users);
 fastify.register(images);
 fastify.register(files);
 fastify.register(sales);
+fastify.register(products);
 
 
 // Run the server!
