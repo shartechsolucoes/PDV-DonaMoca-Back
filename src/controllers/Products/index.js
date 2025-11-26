@@ -107,7 +107,7 @@ export const getProduct = async (request, reply) => {
             where: { id: id },
         });
 
-        if (!Product) return reply.status(404).send({ message: "Não encontrado" });
+        if (!product) return reply.status(404).send({ message: "Não encontrado" });
 
         return reply.status(200).send(product);
     } catch (error) {
