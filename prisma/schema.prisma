@@ -35,6 +35,17 @@ model account_type {
   name            String? @db.VarChar(50)
 }
 
+model image {
+  image_id   Decimal   @id @default(0) @db.Decimal(8, 0)
+  name       String?   @db.VarChar(100)
+  legend     String?   @db.VarChar(250)
+  status     Decimal?  @db.Decimal(1, 0)
+  account_id Decimal?  @db.Decimal(8, 0)
+  date_added DateTime? @db.DateTime(0)
+
+  @@index([account_id], map: "account_id")
+}
+
 model files {
   id           Int      @id @unique(map: "uniq_id_files") @default(autoincrement())
   originalName String   @db.VarChar(300)
@@ -65,7 +76,7 @@ model products {
   obs         String?   @db.VarChar(200)
   cost        String?
   value       String?
-  imgId       Int?
+  imageId     Int?
   status      Int?
   createAt    DateTime  @default(now())
   updateAt    DateTime  @db.DateTime(0)

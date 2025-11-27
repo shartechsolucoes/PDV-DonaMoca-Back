@@ -54,7 +54,7 @@ export const uploadImage = async (req, res) => {
             });
 
             // monta a URL pública
-            const fileUrl = `https://apiv2.moveisdevalor.com.br/upload/images/${nextId}/${part.filename}`;
+            const fileUrl = `/upload/images/${nextId}/${part.filename}`;
 
             res.status(200).send({
                 image_id: nextId,
@@ -85,7 +85,7 @@ export const getImage = async (req, res) => {
         }
 
         // monta a URL pública igual ao upload
-        const fileUrl = `https://apiv2.moveisdevalor.com.br/upload/images/${image.image_id}/${image.name}`;
+        const fileUrl = `/upload/images/${image.image_id}/${image.name}`;
 
         return res.status(200).send({
             image_id: image.image_id,

@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 export const getProducts = async (req, res) => {
     try {
         const Products = await prisma.products.findMany({
+            where: {
+                deleteAt: null
+            },
             orderBy: {
                 createAt: 'desc'
             }
@@ -44,6 +47,7 @@ export const createProduct = async (req, res) => {
                 cost: req.body.cost,
                 value: req.body.value,
                 status: req.body.status,
+                image_id: req.body.image_id,
                 createAt: new Date(),
                 updateAt: new Date(),
             }
@@ -84,6 +88,7 @@ export const updateProduct = async (req, res) => {
                 cost: req.body.cost,
                 value: req.body.value,
                 status: req.body.status,
+                imageId: req.body.imageId,
                 updateAt: new Date()
             }
         });
